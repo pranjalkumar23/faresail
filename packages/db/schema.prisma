@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DealMode {
+  FLIGHT
+  CRUISE
+}
+
+enum DealStatus {
+  PENDING
+  LIVE
+  EXPIRED
+}
+
+// A home region config: where the traveller starts from, and what currency
+// deals in that market are shown in. Kept data-driven (no hardcoded country
+// logic) so new markets are just a new row here plus more ingestion targets.
+model Market {
+  id            String   @id @default(cuid())
+  name          String
+  currency      String
+  originAirports String[] // IATA codes, for flights
+  originPorts    String[] // home ports, for cruises
+  createdAt     DateTime @default(now())
+
+  routes           Route[]
+  emailSubscribers EmailSubscriber[]
+}
+
+// A single origin -> destination combination we track pricing history for.
+model Route {
+  id          String   @id @default(cuid())
+  marketId    String
+  market      Market   @relation(fields: [marketId], references: [id])
+  mode        DealMode
+  origin      String // IATA code or home port name
+  destination String
+  cabinClass  String
+  createdAt   DateTime @default(now())
+
+  snapshots PriceSnapshot[]
+  deals     Deal[]
+
+  @@unique([marketId, mode, origin, destination, cabinClass])
+  @@index([mode, destination])
+}
+
+// One observed price for a route at a point in time. The time series here is
+// what the detector uses to compute each route's "normal" baseline price.
+//
+// Prices are tracked per departure month: an October fare is only comparable
+// with other October fares, since seasonality alone can swing a route by more
+// than our discount threshold. departureMonth ("YYYY-MM") is the grouping key
+// the detector baselines within.
+model PriceSnapshot {
+  id             String   @id @default(cuid())
+  routeId        String
+  route          Route    @relation(fields: [routeId], references: [id])
+  observedAt     DateTime @default(now())
+  departureAt    DateTime?
+  departureMonth String?
+  price          Float
+  source         String // e.g. "travelpayouts", "amadeus", "vacationstogo"
+  rawJson        Json?
+
+  @@index([routeId, observedAt])
+  @@index([routeId, departureMonth, observedAt])
+}
+
+// A candidate or published deal: a snapshot that qualified as a genuine
+// price drop (>=40% below baseline) and passed the quality filters.
+model Deal {
+  id             String     @id @default(cuid())
+  routeId        String
+  route          Route      @relation(fields: [routeId], references: [id])
+  mode           DealMode
+  price          Float
+  baselinePrice  Float
+  discountPct    Int
+  stops          Int?
+  nights         Int?
+  baggageIncluded Boolean?
+  airline        String?
+  departureAt    DateTime?
+  departureMonth String?
+  affiliateUrl   String
+  status         DealStatus @default(PENDING)
+  publishedAt    DateTime?
+  createdAt      DateTime   @default(now())
+
+  @@index([status, mode])
+  @@index([status, departureMonth])
+}
+
+model EmailSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  marketId  String?
+  market    Market?  @relation(fields: [marketId], references: [id])
+  createdAt DateTime @default(now())
+}

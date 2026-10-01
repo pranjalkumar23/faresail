@@ -1,0 +1,10 @@
+{
+  "name": "@travel-deals/ingest-cruises",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./index.ts",
+  "dependencies": {
+    "@travel-deals/db": "*",
+    "@travel-deals/shared": "*"
+  }
+}

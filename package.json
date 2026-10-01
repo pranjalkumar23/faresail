@@ -1,0 +1,28 @@
+{
+  "name": "travel-deals",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=web",
+    "build:web": "npm run build --workspace=web",
+    "db:up": "docker compose up -d db",
+    "db:migrate": "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/faresail prisma migrate dev --schema packages/db/schema.prisma",
+    "db:generate": "prisma generate --schema packages/db/schema.prisma",
+    "db:seed": "tsx packages/db/seed.ts",
+    "detect": "tsx services/detector/run.ts",
+    "publish:pending": "tsx packages/db/publishPending.ts",
+    "ingest:flights": "tsx services/ingest-flights/run.ts",
+    "db:reset-test-history": "tsx packages/db/resetTestMarketHistory.ts",
+    "db:backfill-departure-months": "tsx packages/db/backfillDepartureMonths.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}
