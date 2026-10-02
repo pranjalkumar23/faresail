@@ -5,9 +5,6 @@ drops against each route's own price history, and publish only the ones that cle
 We never handle booking or payment — every deal links out to the airline/cruise line/OTA via an
 affiliate link.
 
-See [`/Users/pkumar20/.claude/plans/rippling-prancing-tower.md`](../../.claude/plans/rippling-prancing-tower.md)
-for the full architecture and phased build plan.
-
 ## Status: Phase 0 (scaffold) complete
 
 - `apps/web` — Next.js 16 + Tailwind site. Currently rendering the full landing page (hero, deal
