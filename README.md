@@ -1,4 +1,4 @@
-# Faresail (working name)
+# TravelDeals
 
 A Zomunk-style deal-alert site for flights *and* cruises: continuously track prices, detect genuine
 drops against each route's own price history, and publish only the ones that clear a quality bar.
@@ -43,7 +43,7 @@ npm run publish:pending    # flips PENDING deals to LIVE (stands in for the Phas
                            # review queue, which doesn't exist yet)
 ```
 
-Then run the dev server with `DATABASE_URL` pointed at local Postgres (the `faresail-web` launch
+Then run the dev server with `DATABASE_URL` pointed at local Postgres (the `traveldeals-web` launch
 config in `.claude/launch.json` already does this) and reload — the feed should now show the 2
 seeded deals instead of the mock ones. `apps/web/app/lib/getDeals.ts` reads `Deal` rows with
 `status: LIVE` straight from Postgres and falls back to mock data if the DB is empty/unreachable.

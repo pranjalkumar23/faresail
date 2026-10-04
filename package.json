@@ -10,7 +10,7 @@
     "dev:web": "npm run dev --workspace=web",
     "build:web": "npm run build --workspace=web",
     "db:up": "docker compose up -d db",
-    "db:migrate": "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/faresail prisma migrate dev --schema packages/db/schema.prisma",
+    "db:migrate": "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/traveldeals prisma migrate dev --schema packages/db/schema.prisma",
     "db:generate": "prisma generate --schema packages/db/schema.prisma",
     "db:seed": "tsx packages/db/seed.ts",
     "detect": "tsx services/detector/run.ts",

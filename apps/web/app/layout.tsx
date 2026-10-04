@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Faresail — Handpicked flight & cruise deals",
+  title: "TravelDeals — Handpicked flight & cruise deals",
   description:
     "We track flight and cruise prices around the clock and only surface deals that are genuinely worth booking.",
 };

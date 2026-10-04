@@ -3,7 +3,7 @@ export default function Header() {
     <header className="sticky top-0 z-10 border-b border-black/[.06] bg-white/80 backdrop-blur dark:border-white/[.08] dark:bg-black/80">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
         <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          FARESAIL
+          TRAVELDEALS
         </span>
         <nav className="flex items-center gap-3">
           <button
